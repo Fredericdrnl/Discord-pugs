@@ -46,6 +46,16 @@ async def on_message(message):
             for player in PLAYERS:
                 await message.channel.send("-" + player)
 
+    #supprimer un joueur de la liste
+    if message.content.lower() == "!remove players" or message.content.lower() == "!rp":
+        for user_mentioned in message.mentions:
+            id : str = "<@" + str(user_mentioned.id) + ">"
+            if id in PLAYERS:
+                PLAYERS.pop(PLAYERS.index(id))
+                await message.channel.send("Le joueur" + id + "à été supprimé de la liste.")
+            else:
+                await message.channel.send("Le joueur" + id + "n'est pas dans la liste.")    
+
 
     # Supprimer les éléments de la liste des participants.
     if message.content.lower() == "!clear players" or message.content.lower() == "!clp":     
