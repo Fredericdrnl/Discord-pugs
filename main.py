@@ -1,70 +1,77 @@
+import discord
 from discord.ext import commands
+from random import randint
 import asyncio
 import selectors
-from random import randint
 
+PLAYERS : list[str] = []
 selector = selectors.SelectSelector()
 loop = asyncio.SelectorEventLoop(selector)
 asyncio.set_event_loop(loop)
 
-class PugsBot(commands.Bot):
-    def __init__(self):
-        super().__init__(command_prefix=".")
-        self.players : list[str] = []
-        self.team1 : list[str] = []
-        self.team2 : list[str] = []
-        self.rand : int
-        self.joueur : str
+print("[INFO] Launching bot...")
+client = discord.Bot(intents=discord.Intents.all())
 
-        @self.command(name='addMe')
-        async def addMe(self, ctx):
-            self.players.append(str(ctx.author))
-            print(self.players)
-            await ctx.channel.send(f"{ctx.author.mention} added")
+@client.event
+async def on_ready():
+    print("[INFO] Bot is ready !")
 
-    @commands.command(name="addPlayer")
-    async def addPlayer(self, ctx):
-        self.players.append(str(ctx.author.name))
-        await ctx.channel.send(f"{ctx.author.name} added")
+@client.event
+async def on_message(message):
 
-    @commands.command(name="removePlayer")
-    async def removePlayer(self, ctx, player):
-        self.players.pop(player.display_name.index())
-        await ctx.channel.send(f"{player.display_name} removed")
+    Team1 : list[str] = []
+    Team2 : list[str] = []
+    rand : int
+    joueur : str
 
-    @commands.command(name="checkList")
-    async def checkList(self, ctx):
-        if len(self.players) == 0:
-            await ctx.channel.send("No one on list")
-        for player in self.players:
-            await ctx.channel.send(player)
+    # Le joueur qui écrit le message s'inscrit au pugs.
+    if message.content.lower() == "!join pugs" or message.content.lower() == "!jpu":
+        PLAYERS.append(str(message.author))
+        print(PLAYERS)
+        await message.channel.send(f"<@{message.author.id}> added")
 
-    @commands.command(name="clearList")
-    async def clearList(self, ctx):
-        self.players.clear()
-        await ctx.channel.send("list cleared")
+    #inscrit le joueur mentionné au pugs
+    if "!join players" in message.content.lower() or "!jpl" in message.content.lower():
+        for user_mentioned in message.mentions:
+            id : str = "<@" + str(user_mentioned.id) + ">"
+            PLAYERS.append(id)
+            await message.channel.send(id + " added")
 
-    @commands.command(name="pugs")
-    async def pugs(self, ctx):
-        if len(self.players) < 9:
-            await ctx.channel.send("Pas assez de joueur pour PUGS")
+    # Regarder la liste des joueurs inscrits.
+    if message.content.lower() == "!check players" or message.content.lower() == "!chp":
+        if len(PLAYERS) == 0:
+            await message.channel.send("No one on list")
         else:
-            for i in range(len(self.players) // 2):
-                rand = randint(0, len(self.players) -1)
-                joueur = self.players.pop(rand)
-                self.team1.append(joueur)
-                rand = randint(0, len(self.players) -1)
-                joueur = self.players.pop(rand)
-                self.team2.append(joueur)
+            await message.channel.send("Voici la liste des joueurs inscrits :")
+            for player in PLAYERS:
+                await message.channel.send("-" + player)
 
-            await ctx.channel.send("\n====== TEAM 1 ======")
-            for player in self.team1:
-                await ctx.channel.send("-" + player)
 
-            await ctx.channel.send("\n====== TEAM 2 ======")
-            for player in self.team2:
-                await ctx.channel.send("-" + player)
-            await ctx.channel.send("\n\nGL !")
+    # Supprimer les éléments de la liste des participants.
+    if message.content.lower() == "!clear players" or message.content.lower() == "!clp":     
+        PLAYERS.clear()
+        await message.channel.send("list cleared")
 
-bot = PugsBot()
-bot.run(open("token.txt", "r").readline())
+    # Génère la liste des 2 équipes composées aléatoirement.
+    if message.content.lower() == "!go pugs" or message.content.lower() == "!gpu":
+        if len(PLAYERS) < 9:
+            await message.channel.send("Pas assez de joueur pour PUGS")
+        else:
+            for i in range(len(PLAYERS) // 2):
+                rand = randint(0, len(PLAYERS) -1)
+                joueur = PLAYERS.pop(rand)
+                Team1.append(joueur)
+                rand = randint(0, len(PLAYERS) -1)
+                joueur = PLAYERS.pop(rand)
+                Team2.append(joueur)
+
+            await message.channel.send("\n====== TEAM 1 ======")
+            for player in Team1:
+                await message.channel.send("- " + player)
+
+            await message.channel.send("\n====== TEAM 2 ======")
+            for player in Team2:
+                await message.channel.send("- " + player)
+            await message.channel.send("\n\nGL !")
+
+client.run(open("token.txt", "r").readline())
