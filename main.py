@@ -21,133 +21,184 @@ import selectors
 # ■■■■■■■■■■■■■■■■■■■■■■■ INIT BOT ■■■■■■■■■■■■■■■■■■■■■■■■ #
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
+# For async/await
 selector = selectors.SelectSelector()
 loop = asyncio.SelectorEventLoop(selector)
 asyncio.set_event_loop(loop)
 
 print("[INFO] Launching bot...")
+# Init for commands
 PLAYERS : list[str] = []
 
+# Init for Bot
 intent = discord.Intents.default()
 intent.members = True
 intent.message_content = True
 bot = commands.Bot(command_prefix="+", intents=intent)
 
+# Message when bot is ready
 @bot.event
 async def on_ready():
     print("[INFO] Bot is ready !")
-
 
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 # ■■■■■■■■■■■■■■■■■■■■■■ COMMAND ■■■■■■■■■■■■■■■■■■■■■■■■■ #
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
+# Know ping of the bot.
 @bot.command()
 async def ping(ctx):
-    await ctx.send(f'Pong ! ({round(bot.latency * 1000)}ms)')
+    embedPing = discord.Embed(title=f'{round(bot.latency * 1000)}ms', description="Ping of PUGS bot.",colour=discord.Colour.from_rgb(240,128,128))
+    embedPing.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+    await ctx.send(embed=embedPing)
 
-# Le joueur qui écrit le message s'inscrit au pugs.
+# Add yourself on pugs list.
 @bot.command()
 async def jpu(ctx):
     id : str = "<@" + str(ctx.author.id) + ">"
     PLAYERS.append(id)
-    print(PLAYERS)
-    await ctx.send(f"<@{ctx.author.id}> added")
+    embedjpu = discord.Embed(title=f"{ctx.author.name} added", colour=discord.Colour.from_rgb(240,128,128))
+    embedjpu.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+    await ctx.send(embed=embedjpu)
 
-#inscrit le joueur mentionné au pugs
+# Add the mentioned players on pugs list.
 @bot.command()
 async def jpl(ctx):
     for user_mentioned in ctx.message.mentions:
         id : str = "<@" + str(user_mentioned.id) + ">"
+        name = str(user_mentioned.name)
         PLAYERS.append(id)
-        await ctx.send(id + " added")
+        embedjpl = discord.Embed(title=name + " added",colour=discord.Colour.from_rgb(240,128,128))
+        embedjpl.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+        await ctx.send(embed=embedjpl)
 
-# Regarder la liste des joueurs inscrits.
-@bot.command()
-async def chp(ctx):
-    if len(PLAYERS) == 0:
-        await ctx.send("No one on list")
-    else:
-        await ctx.send("Voici la liste des joueurs inscrits :")
-        for player in PLAYERS:
-            print(player)
-            await ctx.send("- " + player)
-
-#supprimer un joueur de la liste (le supprime une seule fois).
+# Remove mentioned players from the pugs list.
 @bot.command()
 async def rp(ctx):
+    embedrp = discord.Embed(title="Remove players", description="Remove players from pugs's list",colour=discord.Colour.from_rgb(240,128,128))
     for user_mentioned in ctx.message.mentions:
         user : str = "<@" + str(user_mentioned.id) + ">"
-        print(user)
+        name = str(user_mentioned.name)
         if user in PLAYERS:
             PLAYERS.pop(PLAYERS.index(user))
-            await ctx.send("Le joueur " + str(user) + " à été supprimé de la liste.")
+            embedrp = discord.Embed(title=name + " à été supprimé de la liste.",colour=discord.Colour.from_rgb(240,128,128))
         else:
-            await ctx.send("Le joueur " + str(user) + " n'est pas dans la liste.")   
+            embedrp = discord.Embed(title=name + " n'est pas dans la liste.",colour=discord.Colour.from_rgb(240,128,128))
+    embedrp.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+    await ctx.send(embed=embedrp) 
 
-# Supprimer les éléments de la liste des participants. 
+# Clear pugs list. 
 @bot.command()
 async def clp(ctx):
     PLAYERS.clear()
-    await ctx.send("list cleared")
+    embedclp = discord.Embed(title="List cleared",colour=discord.Colour.from_rgb(240,128,128))
+    embedclp.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+    await ctx.send(embed=embedclp)
 
-# Génère la liste des 2 équipes composées aléatoirement.
+# Show the pugs list.
+@bot.command()
+async def chp(ctx):
+    if len(PLAYERS) == 0:
+        embedchp = discord.Embed(title="No one on list",colour=discord.Colour.from_rgb(240,128,128))
+    else:
+        embedchp = discord.Embed(title="Voici la liste des players inscrits :" , colour=discord.Colour.from_rgb(240,128,128))
+        for player in PLAYERS:
+            name = str(bot.get_user(int(player[2:-1])))
+            embedchp.add_field(name= "- " + name, value="", inline=False)
+    embedchp.add_field(name = "(" + str(len(PLAYERS)) + " Players)", value="", inline=False)
+    embedchp.set_footer(text ="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+    await ctx.send(embed=embedchp)
+
+# Create and show teams for pugs.
 @bot.command()
 async def gpu(ctx):
 
     Team1 : list[str] = []
     Team2 : list[str] = []
+    playersCopy : list[str] = PLAYERS.copy()
     rand : int
-    joueur : str
+    player : str
 
-    if len(PLAYERS) < 9:
-        await ctx.send("Pas assez de joueur pour PUGS")
+    if len(playersCopy) < 4:
+        embedNeedPlayer = discord.Embed(title="Pas assez de player pour PUGS (4 > nb)",colour=discord.Colour.from_rgb(240,128,128))
+        embedNeedPlayer.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+        await ctx.send(embed=embedNeedPlayer)
     else:
-        for i in range(len(PLAYERS) // 2):
-            rand = randint(0, len(PLAYERS) -1)
-            joueur = PLAYERS.pop(rand)
-            Team1.append(joueur)
-            rand = randint(0, len(PLAYERS) -1)
-            joueur = PLAYERS.pop(rand)
-            Team2.append(joueur)
+        nbPlayer : int = len(playersCopy)
+        if len(playersCopy) > 10:
+            nbPlayer = 10
+        for i in range(nbPlayer // 2):
+            rand = randint(0, len(playersCopy) -1)
+            player = playersCopy.pop(rand)
+            Team1.append(player)
+            rand = randint(0, len(playersCopy) -1)
+            player = playersCopy.pop(rand)
+            Team2.append(player)
 
-        await ctx.send("\n====== TEAM 1 ======")
+        embedTeam1 = discord.Embed(title="Team 1", description="Composition of Team 1",colour=discord.Colour.from_rgb(1, 156, 166))
+        embedTeam1.set_thumbnail(url="https://i.goopics.net/crdhux.jpg")
         for player in Team1:
-            await ctx.send("- " + player)
+            name = str(bot.get_user(int(player[2:-1])))
+            embedTeam1.add_field(name= "- " + name, value="", inline=False)
+        embedTeam1.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
 
-        await ctx.send("\n====== TEAM 2 ======")
+        embedTeam2 = discord.Embed(title="Team 2", description="Composition of Team 2", colour=discord.Colour.from_rgb(172, 11, 1))
+        embedTeam2.set_thumbnail(url="https://i.goopics.net/ag3mej.jpg")
         for player in Team2:
-            await ctx.send("- " + player)
-        await ctx.send("\n\nGL !")
+            name = str(bot.get_user(int(player[2:-1])))
+            embedTeam2.add_field(name= "- " + name, value="", inline=False)
+        embedTeam2.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+        
+        await ctx.send(embed=embedTeam1)
+        await ctx.send(embed=embedTeam2)
 
-#génère les teams avec les numéros de 1 à 10 qui représente le placement dans un vocal discord.
+# Create and show teams with numbers that represent the place of the person in the voice lounge on Discord.
 @bot.command()
-async def td(ctx):
+async def od(ctx):
 
     Team1 : list[str] = []
     Team2 : list[str] = []
     rand : int
-    joueur : str
+    player : str
 
     on_discord : list[int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     for i in range(len(on_discord) // 2):
         rand = randint(0, len(on_discord) -1)
-        joueur = on_discord.pop(rand)
-        Team1.append(joueur)
+        player = on_discord.pop(rand)
+        Team1.append(player)
         rand = randint(0, len(on_discord) - 1)
-        joueur = on_discord.pop(rand)
-        Team2.append(joueur)
+        player = on_discord.pop(rand)
+        Team2.append(player)
 
-    await ctx.send("\n====== TEAM 1 ======")
+    embedTeam1 = discord.Embed(title="Team 1", description="Composition of Team 1",colour=discord.Colour.from_rgb(1, 156, 166))
+    embedTeam1.set_thumbnail(url="https://i.goopics.net/crdhux.jpg")
     for player in Team1:
-        await ctx.send("- " + str(player))
+        embedTeam1.add_field(name= "- " + str(player), value="", inline=False)
+    embedTeam1.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
 
-    await ctx.send("\n====== TEAM 2 ======")
+    embedTeam2 = discord.Embed(title="Team 2", description="Composition of Team 2", colour=discord.Colour.from_rgb(172, 11, 1))
+    embedTeam2.set_thumbnail(url="https://i.goopics.net/ag3mej.jpg")
     for player in Team2:
-        await ctx.send("- " + str(player))
-    await ctx.send("\n\nGL !")
+        embedTeam2.add_field(name= "- " + str(player), value="", inline=False)
+    embedTeam2.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+    
+    await ctx.send(embed=embedTeam1)
+    await ctx.send(embed=embedTeam2)
 
-
+# Shows the details of the bot commands
+@bot.command()
+async def helps(ctx):
+    embed = discord.Embed(title="Help", description="All descriptions of BOT's commands", colour=discord.Colour.from_rgb(240,128,128))
+    embed.set_thumbnail(url="https://i.goopics.net/ykuh2d.jpg")
+    embed.add_field(name="- jpu (Join pugs)", value="You join the pugs list.", inline=False)
+    embed.add_field(name="- jpl [players's mentions] (Join players)", value="The players mentioned join the pugs list.", inline=False)
+    embed.add_field(name="- clp (Clear players)", value="Clear the list of pugs.", inline=False)
+    embed.add_field(name="- rp [players's mentions] (Remove players)", value="Remove the mentioned players from the list.", inline=False)
+    embed.add_field(name="- chp (Check players)", value="Show the list of pugs.", inline=False)
+    embed.add_field(name="- gpu (Go pugs)", value="Create and show the teams for pugs.", inline=False)
+    embed.add_field(name="- od (To discord)", value="Create and show teams with numbers that represent the place of the person in the voice lounge.", inline=False)
+    embed.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+    await ctx.send(embed=embed)
 
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 # ■■■■■■■■■■■■■■■■■■■■■■■■ RUN ■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
