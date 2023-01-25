@@ -188,7 +188,7 @@ async def od(ctx):
 # Shows the details of the bot commands
 @bot.command()
 async def helps(ctx):
-    embed = discord.Embed(title="Help", description="All descriptions of BOT's commands", colour=discord.Colour.from_rgb(240,128,128))
+    embed = discord.Embed(title="Help", description="All description of BOT's commands", colour=discord.Colour.from_rgb(240,128,128))
     embed.set_thumbnail(url="https://i.goopics.net/ykuh2d.jpg")
     embed.add_field(name="- jpu (Join pugs)", value="You join the pugs list.", inline=False)
     embed.add_field(name="- jpl [players's mentions] (Join players)", value="The players mentioned join the pugs list.", inline=False)
