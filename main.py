@@ -71,13 +71,13 @@ async def od(ctx):
         player = on_discord.pop(rand)
         Team2.append(player)
 
-    embedTeam1 = discord.Embed(title="Team 1", description="Composition of Team 1",colour=discord.Colour.from_rgb(1, 156, 166))
+    embedTeam1 = discord.Embed(title="Team 1", colour=discord.Colour.from_rgb(1, 156, 166))
     embedTeam1.set_thumbnail(url="https://i.goopics.net/crdhux.jpg")
     for player in Team1:
         embedTeam1.add_field(name= "- " + str(player), value="", inline=False)
     embedTeam1.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
 
-    embedTeam2 = discord.Embed(title="Team 2", description="Composition of Team 2", colour=discord.Colour.from_rgb(172, 11, 1))
+    embedTeam2 = discord.Embed(title="Team 2", colour=discord.Colour.from_rgb(172, 11, 1))
     embedTeam2.set_thumbnail(url="https://i.goopics.net/ag3mej.jpg")
     for player in Team2:
         embedTeam2.add_field(name= "- " + str(player), value="", inline=False)
@@ -126,14 +126,14 @@ async def ov(ctx, member : discord.Member):
             player = players.pop(rand)
             Team2.append(player)
 
-        embedTeam1 = discord.Embed(title="Team 1", description="Composition of Team 1",colour=discord.Colour.from_rgb(1, 156, 166))
+        embedTeam1 = discord.Embed(title="Team 1",colour=discord.Colour.from_rgb(1, 156, 166))
         embedTeam1.set_thumbnail(url="https://i.goopics.net/crdhux.jpg")
         for player in Team1:
             name = str(bot.get_user(int(player[2:-1])))
             embedTeam1.add_field(name= "- " + name, value="", inline=False)
         embedTeam1.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
 
-        embedTeam2 = discord.Embed(title="Team 2", description="Composition of Team 2", colour=discord.Colour.from_rgb(172, 11, 1))
+        embedTeam2 = discord.Embed(title="Team 2", colour=discord.Colour.from_rgb(172, 11, 1))
         embedTeam2.set_thumbnail(url="https://i.goopics.net/ag3mej.jpg")
         for player in Team2:
             name = str(bot.get_user(int(player[2:-1])))
