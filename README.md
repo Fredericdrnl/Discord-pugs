@@ -19,7 +19,7 @@
 
 ## What technology was used ? ⚙️
 
-*PUGSBOT* was created with *Python* language and with *Discord.ext* labrary.
+*PUGSBOT* was created with *Python* language and with *Discord.ext* library.
 
 <sub>Python website : https://www.python.org/</sub>
 
