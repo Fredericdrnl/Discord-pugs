@@ -21,6 +21,10 @@
 
 *PUGSBOT* was created with *Python* language and with *Discord.ext* labrary.
 
+```
+pip install discord
+```
+
 <sub>Python website : https://www.python.org/</sub>
 
 <sub>Discord.ext website : https://discordpy.readthedocs.io/en/stable/index.html</sub>
