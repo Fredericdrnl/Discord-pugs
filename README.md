@@ -27,20 +27,12 @@
 
 ## Commands 📋
 
-`- jpu (Join pugs) ▶️ You join the pugs list.`  
+`- +rdmpugs [@member in vocal channel] ▶️ Create and show teams for pugs (randoms teams).`  
 
-`- jpl [players's mentions] (Join players) ▶️ The players mentioned join the pugs list.`
+`- +leaders [@member in vocal channel] ▶️ Give 2 leaders among the members on vocal.`
 
-`- jpl [players's mentions] (Join players) ▶️ The players mentioned join the pugs list.`
+`- +map ▶️ Give random map.`
 
-`- clp (Clear players) ▶️ Clear the list of pugs.`
-
-`- rp [players's mentions] (Remove players) ▶️ Remove the mentioned players from the list.`
-
-`- chp (Check players) ▶️ Show the list of pugs.`
-
-`- gpu (Go pugs) ▶️ Create and show the teams for pugs.`
-
-`- od (To discord) ▶️ Create and show teams with numbers that represent the place of the person in the voice lounge.`
+`- +helps ▶️ All description of BOT's commands.`
 
 
