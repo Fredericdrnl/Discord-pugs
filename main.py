@@ -30,6 +30,24 @@ asyncio.set_event_loop(loop)
 print("[INFO] Launching bot...")
 # Init for commands
 PLAYERS : list[str] = []
+MAPS_IMG : list[str] = ['https://static.wikia.nocookie.net/paladins_gamepedia/images/7/72/Loading_Isle.png/revision/latest/scale-to-width-down/300?cb=20200216202446', #FROG ISLE
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/1/13/Loading_Jaguar_Falls.png/revision/latest/scale-to-width-down/300?cb=20220703100404', #JAGUAR FALLS
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/7/7e/Loading_BeachV2.png/revision/latest/scale-to-width-down/300?cb=20161121123855', #SERPENT BEACH
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/e/e5/Loading_NRIgloo.png/revision/latest/scale-to-width-down/300?cb=20201006103647', #FROZEN GUARD
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/b/b2/Loading_NRMines.png/revision/latest/scale-to-width-down/300?cb=20190817013544', #ICE MINES
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/b/b8/Loading_Village.png/revision/latest/scale-to-width-down/300?cb=20161012050227', #FISH MARKET
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/7/7b/Loading_SpiralV2.png/revision/latest/scale-to-width-down/300?cb=20210205011206', #TIMBER MILL
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/6/6a/Loading_Castle.png/revision/latest/scale-to-width-down/300?cb=20210831172847', #STONE KEEP
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/d/db/Loading_Atrium.png/revision/latest/scale-to-width-down/300?cb=20170504114439', #BRIGHTMARSH
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/4/44/Loading_Quarry.png/revision/latest/scale-to-width-down/300?cb=20170722155850', #SPLISTONE QUARRY
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/3/38/Loading_AscensionPeak.png/revision/latest/scale-to-width-down/300?cb=20180210174622', #ASCENSION PEAK
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/2/2b/Loading_DragonSiege.png/revision/latest/scale-to-width-down/300?cb=20220225193429', #WARDER'S GATE 
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/3/39/Loading_ShatteredDesert.png/revision/latest/scale-to-width-down/300?cb=20190507191952', #SHATTERED DESERT
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/e/ea/Loading_Bazaar.png/revision/latest/scale-to-width-down/300?cb=20190507192056', #BAZAAR
+                    'https://static.wikia.nocookie.net/paladins_gamepedia/images/3/36/Loading_Dawnforge.png/revision/latest/scale-to-width-down/300?cb=20221029120554'#DAWNFORGE
+                    ]
+
+MAPS_NOM = ["Frog isle", "Jaguar falls", "Serpent beach", "Frozen Guard", "Ice mines", "Fish market", "Timber mill", "Stone keep", "Brightmarsh", "Splitstone quarry", "Ascension peak", "Warder's gate", "Shattered desert", "Bazaar", "Dawnforge"]
 
 # Init for Bot
 intent = discord.Intents.default()
@@ -88,7 +106,7 @@ async def od(ctx):
 
 # Create and show teams with the members of the voice channel where the member passed in parameter is located.
 @bot.command()  
-async def ov(ctx, member : discord.Member):
+async def rdmpugs(ctx, member : discord.Member):
     try:
         channel1 = member.voice.channel.id
     except AttributeError:
@@ -113,7 +131,7 @@ async def ov(ctx, member : discord.Member):
     if len(players) < 4:
         embedNeedPlayer = discord.Embed(title="Pas assez de player pour PUGS (nb < 3)",colour=discord.Colour.from_rgb(240,128,128))
         embedNeedPlayer.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
-        await ctx.send(embed=embedNeedPlayer)
+        return await ctx.send(embed=embedNeedPlayer)
     else:
         nbPlayer : int = len(players)
         if len(players) > 10:
@@ -143,18 +161,72 @@ async def ov(ctx, member : discord.Member):
         await ctx.send(embed=embedTeam1)
         await ctx.send(embed=embedTeam2)
 
-# Shows the details of the bot commands
 @bot.command()
-async def helps(ctx):
-    embed = discord.Embed(title="Help", description="All description of BOT's commands", colour=discord.Colour.from_rgb(240,128,128))
-    embed.set_thumbnail(url="https://i.goopics.net/ykuh2d.jpg")
-    embed.add_field(name="- od (On discord)", value="Create and show teams with numbers that represent the place of the person in the voice lounge.", inline=False)
-    embed.add_field(name="- ov (To voice channel)", value="Create and show teams with person on the voice channel where is the person.", inline=False)
+async def maps(ctx):
+    nb : int = randint(0, len(MAPS_NOM) - 1)
+    embed = discord.Embed(title = MAPS_NOM[nb], colour=discord.Colour.from_rgb(240,128,128))
+    embed.set_image(url=MAPS_IMG[nb])
     embed.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
     await ctx.send(embed=embed)
 
+@bot.command()
+async def capitaine(ctx, member : discord.Member):
+    try:
+        channel1 = member.voice.channel.id
+    except AttributeError:
+        embedNeedVocal = discord.Embed(title= str(member.name) + " n'est pas dans un salon vocal.",colour=discord.Colour.from_rgb(240,128,128))
+        return await ctx.send(embed=embedNeedVocal)
 
-# ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
+    channel = bot.get_channel(channel1)
+    #finds members connected to the channel
+    members = channel.members 
+
+    capitaine1 : str
+    capitaine2 : str
+    players : list[str] = [] 
+    for member in members:
+        players.append("<@" + str(member.id) + ">")
+    
+    if len(players) < 4:
+        embedNeedPlayer = discord.Embed(title="Pas assez de player pour PUGS (nb < 3)",colour=discord.Colour.from_rgb(240,128,128))
+        embedNeedPlayer.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+        return await ctx.send(embed=embedNeedPlayer)
+
+    rand = randint(0, len(players) -1)
+    capitaine1 = players.pop(rand)
+    embedcapitaine1 = discord.Embed(title=capitaine1,colour=discord.Colour.from_rgb(1, 156, 166))
+    embedcapitaine1.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+
+    rand = randint(0, len(players) -1)
+    capitaine2 = players.pop(rand)
+    embedcapitaine2 = discord.Embed(title=capitaine2,colour=discord.Colour.from_rgb(172, 11, 1))
+    embedcapitaine2.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+
+    ctx.send(embed=embedcapitaine1)
+    ctx.send(embed=embedcapitaine2)
+
+
+
+# Shows the details of the bot commands
+@bot.command()
+async def helps(ctx):
+    embedEN = discord.Embed(title="Help 🇫🇷", description="Toute la description des commandes du BOT.", colour=discord.Colour.from_rgb(240,128,128))
+    embedEN.set_thumbnail(url="https://i.goopics.net/ykuh2d.jpg")
+    embedEN.add_field(name="+rdmpugs [@un membre dans le vocal]", value="Créer et affiche les teams pour le pugs (teams randoms).", inline=False)
+    embedEN.add_field(name="+capitaine [@un membre dans le vocal]", value="Donne 2 capitaines parmis le vocal.", inline=False)
+    embedEN.add_field(name="+maps", value="Donne une map aléatoire.", inline=False)
+    embedEN.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+
+    embedFR = discord.Embed(title="Help 🇬🇧", description="All description of BOT's commands.", colour=discord.Colour.from_rgb(240,128,128))
+    embedFR.set_thumbnail(url="https://i.goopics.net/ykuh2d.jpg")
+    embedFR.add_field(name="+rdmpugs [@member in vocal channel]", value="Create and show teams for pugs (randoms teams).", inline=False)
+    embedFR.add_field(name="+capitaine [@member in vocal channel]", value="Give 2 leaders among the members on vocal.", inline=False)
+    embedFR.add_field(name="+maps", value="Give random map.", inline=False)
+    embedFR.set_footer(text="By WarFlay#8465", icon_url="https://i.goopics.net/encbhm.png")
+    await ctx.send(embed=embedFR)
+    await ctx.send(embed=embedEN)
+
+# ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #    
 # ■■■■■■■■■■■■■■■■■■■■■■■■ RUN ■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 # ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ #
 
