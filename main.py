@@ -267,51 +267,67 @@ async def leaders(ctx, member: discord.Member):
   await ctx.send(embed=embedleader1)
   await ctx.send(embed=embedleader2)
 
+@bot.command()
+async def setpugs(ctx, member : discord.Member):
+  await leaders(ctx, member)
+  membres = bot.get_channel(member.voice.channel.id).members
+  if len(membres) > 4:
+    await map(ctx)
+
+
 
 # Shows the details of the bot commands
 @bot.command()
 async def helps(ctx):
   
-  embedEN = discord.Embed(
+  embedFR = discord.Embed(
     title="Help 🇫🇷",
     description="Toute la description des commandes du BOT.",
     colour=discord.Colour.from_rgb(240, 128, 128))
   
-  embedEN.set_thumbnail(url="https://i.goopics.net/ykuh2d.jpg")
+  embedFR.set_thumbnail(url="https://i.goopics.net/ykuh2d.jpg")
 
-  embedEN.add_field(
+  embedFR.add_field(
     name="+rdmpugs [@un membre dans le vocal]",
     value="Créer et affiche les teams pour le pugs (teams randoms).",
     inline=False)
   
-  embedEN.add_field(name="+leaders [@un membre dans le vocal]",
+  embedFR.add_field(name="+leaders [@un membre dans le vocal]",
                     value="Donne 2 capitaines parmis le vocal.",
                     inline=False)
   
-  embedEN.add_field(name="+map",
+  embedFR.add_field(name="+map",
                     value="Donne une map aléatoire.",
                     inline=False)
+
+  embedFR.add_field(name="+setpugs",
+                    value="Donne 2 capitaines parmis le vocal et une map aléatoire.",
+                    inline=False)
   
-  embedEN.set_footer(text="By WarFlay#8465",
+  embedFR.set_footer(text="By WarFlay#8465",
                      icon_url="https://i.goopics.net/encbhm.png")
 
-  embedFR = discord.Embed(title="Help 🇬🇧",
+  embedEN = discord.Embed(title="Help 🇬🇧",
                           description="All description of BOT's commands.",
                           colour=discord.Colour.from_rgb(240, 128, 128))
   
-  embedFR.set_thumbnail(url="https://i.goopics.net/ykuh2d.jpg")
+  embedEN.set_thumbnail(url="https://i.goopics.net/ykuh2d.jpg")
 
-  embedFR.add_field(name="+rdmpugs [@member in vocal channel]",
+  embedEN.add_field(name="+rdmpugs [@member in vocal channel]",
                     value="Create and show teams for pugs (randoms teams).",
                     inline=False)
   
-  embedFR.add_field(name="+leaders [@member in vocal channel]",
+  embedEN.add_field(name="+leaders [@member in vocal channel]",
                     value="Give 2 leaders among the members on vocal.",
                     inline=False)
   
-  embedFR.add_field(name="+map", value="Give random map.", inline=False)
+  embedEN.add_field(name="+map", value="Give random map.", inline=False)
 
-  embedFR.set_footer(text="By WarFlay#8465",
+  embedEN.add_field(name="+setpugs",
+                    value="Give 2 leaders among the members on vocal and a random map.",
+                    inline=False)
+
+  embedEN.set_footer(text="By WarFlay#8465",
                      icon_url="https://i.goopics.net/encbhm.png")
   
   await ctx.send(embed=embedFR)
