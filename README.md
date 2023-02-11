@@ -37,6 +37,8 @@ pip install discord
 
 `- +map ▶️ Give random map.`
 
+`- +setpugs [@member in vocal channel] ▶️ Give 2 leaders among the members on vocal and a random map.`
+
 `- +helps ▶️ All description of BOT's commands.`
 
 
