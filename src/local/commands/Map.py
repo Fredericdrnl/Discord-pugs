@@ -34,6 +34,8 @@ class MapCommand(commands.Cog):
 
     @commands.command()
     async def map(self, ctx):
+        """Commande qui choisit une carte aléatoirement.
+        """
         nb: int = randint(0, len(self.mapNAME) - 1)
 
         embed = discord.Embed(title= self.mapNAME[nb],

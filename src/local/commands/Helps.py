@@ -10,7 +10,8 @@ class HelpsCommand(commands.Cog):
 
     @commands.command()
     async def helps(self, ctx):
-  
+        """Commande permettant d'afficher toutes les commandes du bot avec une explication de celles-ci.
+        """
         embedFR = discord.Embed(
             title="Help 🇫🇷",
             description="Toute la description des commandes du BOT.",

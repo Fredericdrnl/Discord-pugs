@@ -11,6 +11,8 @@ class LeadersCommand(commands.Cog):
 
     @commands.command()
     async def leaders(self, ctx, member: discord.Member):
+        """Commande permettant de définir 2 capitaines d'équipe.
+        """
         try:
             channel1 = member.voice.channel.id
         except AttributeError:

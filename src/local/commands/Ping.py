@@ -10,6 +10,8 @@ class PingCommand(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
+        """Test pour ping le bot pour voir les MS.
+        """
         embedPing = discord.Embed(title=f'{round(self.bot.latency * 1000)}ms',
                                     description="Ping of PUGS bot.",
                                     colour=discord.Colour.from_rgb(240, 128, 128))

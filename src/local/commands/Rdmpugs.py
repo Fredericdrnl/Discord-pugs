@@ -12,6 +12,8 @@ class RdmpugsCommand(commands.Cog):
 
     @commands.command()
     async def rdmpugs(self, ctx, member: discord.Member):
+        """Commande permettant 2 équipes aléatoires à partir du salon vocal du joueur mentionné.
+        """
         try:
             channel1 = member.voice.channel.id
         except AttributeError:
